@@ -1,0 +1,5 @@
+
+
+provider "digitalocean" {
+  token = "seutokenaqui"
+}
