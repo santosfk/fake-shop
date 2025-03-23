@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-shop
+  labels:
+    app: fake-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fake-shop
+  template:
+    metadata:
+      labels:
+        app: fake-shop
+    spec:
+      containers:
+      - name: fake-shop
+        image: usantos802/fake-shop:v1
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DB_NAME
+          value: fake_shop
+        - name: DB_USER
+          value: user
+        - name: DB_PASSWORD
+          value: password
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          value: "5432"
+        - name: FLASK_APP
+          value: index.py
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        env:
+        - name: POSTGRES_DB
+          value: fake_shop
+        - name: POSTGRES_USER
+          value: user
+        - name: POSTGRES_PASSWORD
+          value: password
+        ports:
+        - containerPort: 5432
